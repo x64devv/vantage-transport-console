@@ -1,0 +1,85 @@
+/* Console-local styles.
+ *
+ * ⚠ globals.css is design/styles.css shipped as-is and must not be edited. This
+ * file carries only what an inline style cannot express — hover states, the
+ * scrollbar, and the Leaflet overrides the prototype kept in its <helmet>. Every
+ * value here is a Modernist token or a literal the prototype already used.
+ */
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+/* The desk the console sits on. From the prototype: --color-neutral-300. */
+body {
+  background: var(--color-neutral-300);
+}
+
+/* Monospace, tabular figures. Every figure, identifier, timestamp and money
+   value on every screen goes through this class. */
+.mono {
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+a {
+  color: var(--color-accent);
+}
+a:hover {
+  color: var(--color-accent-700);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-neutral-400);
+}
+
+/* ── Hover states ─────────────────────────────────────────────────────────
+   From the handoff's interaction table: rows #e6e4e4, rail #e0dede, cards
+   --shadow-sm. Never browser defaults, never a transition that softens the
+   Modernist edge. */
+.row-hover:hover {
+  background: #e6e4e4;
+}
+.rail-item:hover {
+  background: #e0dede;
+}
+.card-hover:hover {
+  box-shadow: var(--shadow-sm);
+}
+.veh-row:hover {
+  filter: brightness(0.97);
+}
+
+/* Focus is the accent ring, offset 2px — set here for the non-<button> elements
+   the console makes interactive (rows, cards, beat squares). */
+.focusable:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ── Leaflet ──────────────────────────────────────────────────────────────
+   ⚠ The OSM attribution is a licence requirement. It is kept small but it is
+   never removed and never hidden. */
+.leaflet-container {
+  font-family: Archivo, system-ui, sans-serif;
+  background: var(--color-surface);
+}
+.leaflet-control-attribution {
+  font-size: 9px;
+}
+.leaflet-container .leaflet-control-zoom a {
+  border-radius: 0;
+}
+
+/* The table component from styles.css, tightened to the densities the console
+   uses. Rules stay at their full weight — they are the structure. */
+.table td,
+.table th {
+  padding: 7px 10px;
+}
