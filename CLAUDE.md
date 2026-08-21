@@ -3,7 +3,7 @@
 **Repo:** `XPOS/vantage-transport-console/`
 **What it is:** the demo build of the transport planner/fleet console, from the Claude Design handoff.
 **Deadline:** presentation **Wednesday 26 August 2026**, department heads and directors.
-**Last updated:** 20 August 2026 — *B1–B10 built and driven in a browser. B11, the projector pass, is not done. TM-4's evidence rows re-sequenced when the driver app was built — see §7.*
+**Last updated:** 21 August 2026 — *B1–B10 built and driven in a browser. B11, the projector pass, is not done. TM-4's evidence rows re-sequenced when the driver app was built (§7), and `next` bumped off a CVSS-10 vulnerability but **not yet installed or re-verified here** (§7a).*
 
 ---
 
@@ -217,6 +217,41 @@ handoff's suggested stop order was *slower* than the dispatcher's plan, and that
 no reorder of that run can hold its time windows. See
 `XPOS/vantage-driver-app/CLAUDE.md` §5. Nothing on TM-2 changes; it is worth
 knowing before somebody quotes a saving in the room.
+
+---
+
+## 7a. ⚠⚠ Security — `next` bumped 21 August, and this repo needs `npm install`
+
+Vercel flagged the driver app's `next@15.5.4` as vulnerable. It is **React2Shell** —
+`CVE-2025-66478` / upstream `CVE-2025-55182`, **CVSS 10.0 remote code execution** through the React
+Server Components protocol, actively exploited. All of Next.js 15.x and 16.x on the App Router are
+affected; the fix landed in **15.5.7**.
+
+**This console was on the same `15.5.4`.** `package.json` and `package-lock.json` now name
+**`15.5.23`**, the latest in the patched 15.5 line.
+
+⚠⚠ **The install has NOT been run here and this build has NOT been re-verified.** The machine
+holding this repo has no npm registry access, so only the two manifest files were changed. Before
+the 26th:
+
+```
+npm install
+npm run build
+npm start          # then click through all six screens again
+```
+
+⚠ **What the exposure actually was.** This console is `output: 'export'` — the demo is static files
+served by `serve.mjs`, with no Next.js runtime behind them, so the demo path was never exploitable.
+The real exposure is `npm run dev` on a laptop, which does run a server. Patch it; do not panic
+about it.
+
+⚠ Chosen over `next@16.3.1` deliberately: a major version five days before a boardroom demo buys a
+different set of unknowns than the one it removes. Two build-time-only advisories (`postcss`
+source-map path traversal, `sharp`/libvips) stay open because `npm audit fix --force` resolves them
+by installing 16.x. Neither is reachable from a static export. Revisit after the 26th.
+
+⚠ The sibling driver app **is** patched and re-verified — 87 of 87 assertions pass on `15.5.23`,
+screens unchanged. See `XPOS/vantage-driver-app/CLAUDE.md` §10a.
 
 ---
 
