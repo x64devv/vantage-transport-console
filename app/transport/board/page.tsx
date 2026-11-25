@@ -64,7 +64,13 @@ export default function Board() {
           Promised today. Left is what is not on a truck yet.
         </div>
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
-          <button className="btn btn-secondary" type="button">Auto-group by zone</button>
+          {/* ⚠ In the design, not wired. Dimmed and labelled so it is never a dead control. */}
+          <button
+            className="btn btn-secondary" type="button" disabled
+            title="Not wired in this demo" style={{ opacity: 0.45, cursor: 'not-allowed' }}
+          >
+            Auto-group by zone · not in this demo
+          </button>
           <button
             className="btn btn-primary"
             type="button"
