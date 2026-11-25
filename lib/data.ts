@@ -27,6 +27,18 @@ export const N7 = '#605d5d';
 export const TX = '#201e1d';
 
 export const CLOCK = 'Thu 20 Aug 2026 · 07:15';
+
+/* ⚠⚠ ONE DAY, THREE MOMENTS — found on the 25 Nov cross-app walk. The board and
+   the builder are the morning (07:15). TM-3 is the afternoon: it lists
+   exceptions raised at 11:48, 15:10 and 15:14, which a 07:15 clock cannot show.
+   TM-4's record has the cash in the ledger at 18:14, so search, cost and the
+   reports are the evening. The header says which moment each screen is. */
+export function clockFor(pathname: string) {
+  const p = pathname.replace(/\/+$/, '');
+  if (p.endsWith('/transport/live')) return 'Thu 20 Aug 2026 · 15:20';
+  if (/\/transport\/(search|fleet\/cost|reports|notes)$/.test(p)) return 'Thu 20 Aug 2026 · 18:20';
+  return CLOCK;
+}
 export const DEPART = '06:45';
 
 export const DEPOT = { label: 'Willowvale depot', lat: -17.877, lng: 31.005 };
@@ -50,6 +62,10 @@ export const SUB: Record<string, [number, number]> = {
   Braeside: [-17.846, 31.062],
   Hillside: [-17.86, 31.09],
   Cranborne: [-17.86, 31.008],
+  /* ⚠ Added 25 Nov so trip 05 is the driver's run: these two are the driver
+     app's own stop pins (lib/run.ts), used here as the suburb point. */
+  Highlands: [-17.79, 31.11],
+  Chisipite: [-17.775, 31.12],
 };
 
 export const co = (s: string): [number, number] => SUB[s] || [-17.84, 31.05];
@@ -136,16 +152,21 @@ export const POOL_ALL: Consignment[] = [
   { inv: '414601', customer: 'T. Mabaya', suburb: 'Waterfalls', goods: 'Bulk dry goods, loose', branch: 'MW Mbare Wholesale', service: 51, dims: false },
 ];
 
+/* ⚠⚠ Trip 05 IS the driver's run — same eight stops, same order, same goods
+   (vantage-driver-app/lib/run.ts, derived from the dispatch day). Until the
+   25 Nov cross-app walk this list was nine different customers under the same
+   trip id, so TM-2 and the driver's phone disagreed about who was on the truck.
+   Stop 6 is the branch transfer, which carries no invoice. Service minutes and
+   which lines have pack sizes on file are illustrative. */
 export const SEED_STOPS: Consignment[] = [
+  { inv: '414396', customer: 'T. Nyamayaro', suburb: 'Highlands', goods: 'Sugar 2kg × 10, bale × 12', branch: 'VE Willowvale', service: 22, dims: true, m3: 0.6 },
+  { inv: '414399', customer: 'Chisipite Junior School', suburb: 'Chisipite', goods: 'Rice 10kg, bag × 15', branch: 'VE Willowvale', service: 30, dims: false },
+  { inv: '414405', customer: 'M. Kadzviti', suburb: 'Greendale', goods: 'Soft drinks 300ml × 24, crate × 20', branch: 'VE Willowvale', service: 28, dims: true, m3: 0.9 },
   { inv: '414414', customer: 'Nancy Muhoni', suburb: 'Greendale', goods: 'Chest freezer + cooking oil + maize meal', branch: 'VE Willowvale', service: 42, dims: true, m3: 1.6 },
-  { inv: '414402', customer: 'W. Mhaka', suburb: 'Greendale', goods: 'Sugar 2kg bales × 30', branch: 'VE Willowvale', service: 26, dims: true, m3: 1.1 },
-  { inv: '414388', customer: 'Tendai Zuze', suburb: 'Newlands', goods: 'Mixed grocery order, 40 lines', branch: 'BR Borrowdale', service: 47, dims: false },
-  { inv: '414377', customer: 'C. Manyika', suburb: 'Eastlea', goods: 'Loose produce + bulk dry goods', branch: 'FS Fourth Street', service: 55, dims: false },
-  { inv: '414365', customer: 'S. Kadenge', suburb: 'Msasa', goods: 'Cooking oil 2L, 15 cases', branch: 'MW Mbare Wholesale', service: 24, dims: true, m3: 0.6 },
-  { inv: '414360', customer: 'F. Nyoni', suburb: 'Braeside', goods: 'Rice 10kg × 35', branch: 'VE Willowvale', service: 28, dims: true, m3: 0.7 },
-  { inv: '414352', customer: 'M. Chidzero', suburb: 'Hillside', goods: 'Cleaning products, mixed', branch: 'MN Mbare North', service: 39, dims: false },
-  { inv: '414344', customer: 'L. Muzenda', suburb: 'Cranborne', goods: 'Soft drinks, 25 crates', branch: 'VE Willowvale', service: 32, dims: true, m3: 0.8 },
-  { inv: '414331', customer: 'D. Sithole', suburb: 'Waterfalls', goods: 'Mixed tuckshop order, 28 lines', branch: 'MW Mbare Wholesale', service: 26, dims: false },
+  { inv: '414410', customer: 'R. Mabhena', suburb: 'Msasa', goods: 'Washing powder 2kg × 9, case × 8', branch: 'VE Willowvale', service: 24, dims: false },
+  { inv: 'IDO-0007', customer: 'Metro Borrowdale', suburb: 'Borrowdale', goods: 'Branch transfer, 4 lines', branch: 'VE Willowvale', service: 38, dims: false },
+  { inv: '414419', customer: 'P. Chikafu', suburb: 'Avondale', goods: 'Bread flour 10kg, bag × 25', branch: 'VE Willowvale', service: 26, dims: true, m3: 0.8 },
+  { inv: '414423', customer: 'L. Sibanda', suburb: 'Hatfield', goods: 'Candles 6s × 30, case × 10', branch: 'VE Willowvale', service: 22, dims: false },
 ];
 
 export const SEED_TRIP_ID = 'TR-HRE-2026-08-20-05';
@@ -249,17 +270,19 @@ export type LiveTrip = {
 };
 
 export const LIVE_TRIPS: LiveTrip[] = [
-  { id: 'TR-HRE-2026-08-20-01', vehicle: 'AHD4410', driver: 'B. Chimbetu', stops: '5 / 11', position: 'Msasa, Mutare Road', posSource: 'fix 07:14 · Cartrack', posColor: TX, eta: '15:40', etaNote: 'from 6 remaining stops' },
-  { id: 'TR-HRE-2026-08-20-02', vehicle: 'AHD4411', driver: 'S. Chagonda', stops: '3 / 10', position: 'Position unavailable', posSource: 'last fix 06:41 — stale, not shown', posColor: AC7, eta: '—', etaNote: 'no ETA without a fix' },
-  { id: 'TR-HRE-2026-08-20-03', vehicle: 'AHD4418', driver: 'T. Mukanya', stops: '0 / 8', position: 'Depot gate, Willowvale', posSource: 'departed 07:06 · by geofence', posColor: TX, eta: '14:10', etaNote: 'planned, not yet driving' },
+  { id: 'TR-HRE-2026-08-20-01', vehicle: 'AHD4410', driver: 'B. Chimbetu', stops: '10 / 11', position: 'Mabvuku, Ruwa Road', posSource: 'fix 15:17 · Cartrack', posColor: TX, eta: '15:40', etaNote: 'from 1 remaining stop' },
+  { id: 'TR-HRE-2026-08-20-02', vehicle: 'AHD4411', driver: 'S. Chagonda', stops: '7 / 10', position: 'Position unavailable', posSource: 'last fix 06:41 — stale, not shown', posColor: AC7, eta: '—', etaNote: 'no ETA without a fix' },
+  { id: 'TR-HRE-2026-08-20-03', vehicle: 'AHD4418', driver: 'C. Nyathi', stops: '8 / 8', position: 'Depot gate, Willowvale', posSource: 'back 14:52 · by geofence', posColor: TX, eta: '—', etaNote: 'run complete' },
+  { id: 'TR-HRE-2026-08-20-05', vehicle: 'AHF5121', driver: 'T. Mukanya', stops: '5 / 8', position: 'Msasa, Enterprise Road', posSource: 'fix 15:18 · Cartrack', posColor: TX, eta: '17:30', etaNote: 'from 3 remaining stops' },
   { id: 'TR-HRE-2026-08-20-10', vehicle: 'AHX2205', driver: 'Kopje Haulage', stops: '—', position: 'Not tracked', posSource: 'hired carrier · no telemetry', posColor: N7, eta: '—', etaNote: 'proof on return' },
 ];
 
 /* ⚠ Only the two vehicles with a current fix are on the map. AHD4411 is absent
    on purpose — see LIVE_TRIPS above. */
 export const LIVE_VEHICLES = [
-  { label: 'AHD4410', lat: -17.846, lng: 31.123 },
+  { label: 'AHD4410', lat: -17.82, lng: 31.16 },
   { label: 'AHD4418', lat: -17.874, lng: 31.006 },
+  { label: 'AHF5121', lat: -17.85, lng: 31.12 },
 ];
 
 /* ── TM-3: exceptions ─────────────────────────────────────────────────────
@@ -277,7 +300,7 @@ export const EXCEPTIONS: ExceptionRow[] = [
     ref: 'EX-000029114',
     title: 'Serial mismatch — blocked at the load',
     detail: 'Sold on invoice 410233, 21 June, dispatched to Kwekwe.',
-    raised: '07:31', by: 'T. Mukanya', fault: 'Gain', status: 'Open', statusColor: AC7,
+    raised: '07:31', by: 'C. Nyathi', fault: 'Gain', status: 'Open', statusColor: AC7,
     expanded: 'Serial #G-000004652985 scanned onto trip 03; the trail says it left Kwekwe on 24 June. The load is held. Override requires the Serial Mismatch Override grant.',
   },
   {
@@ -294,6 +317,17 @@ export const EXCEPTIONS: ExceptionRow[] = [
     detail: 'Outcomes, signatures and cash already arrived. 41 images queued.',
     raised: '15:10', by: '—', fault: '—', status: 'Open', statusColor: N7,
     expanded: 'Not a failure. PROOF_MEDIA drains on wifi only; the proof itself posted at 15:10. This row closes itself when the truck reaches the depot.',
+  },
+  /* ⚠⚠ Beat 10 lands here at beat 11. The driver app mints this ref for stop 5
+     (EX-0000291 + stop id + seq) when he records "Nobody at the address" — so
+     the failure the room just watched on the phone is the row it reads next. */
+  {
+    ref: 'EX-000029155',
+    title: 'Delivery failed — nobody at the address',
+    detail: 'Stop 5 · R. Mabhena · Msasa · trip 05.',
+    raised: '15:14', by: 'T. Mukanya', fault: 'Customer',
+    status: 'Awaiting rebook by VE · due 09:00 tomorrow', statusColor: N7,
+    expanded: 'Rebook is owned by the branch that sold it — VE Willowvale — not by transport. The 8 cases stay on the truck in the transit bin and come back to Willowvale goods-in under seals Z-114882/83.',
   },
 ];
 
@@ -401,23 +435,22 @@ export const VARIANCE = [
    ⚠⚠ Every input is either already on a screen in this console or labelled
    illustrative on this one. The arithmetic is done here, in code, from those
    inputs — no figure is typed in as a result.
-   - 73 km is TM-2's OSRM road estimate for the seeded trip's stops (the builder
-     prints '73 km by road'). Not the odometer: the driver app's 106 km odometer
-     day includes the two depot legs, which are not routed.
+   - Distance is TM-2's OSRM road estimate for trip 05's stops in the planner's
+     order, read from lib/routes-cache.ts on the cost page — never typed here.
    - $1.184/km is TM-5's 'Cost per km, excl. 3PL' row (illustrative).
    - Crew cost is illustrative: no wage data exists in this build.
    - Revenue: invoice 414414's USD 21.65 delivery charge is on TM-4; the other
-     eight stops are priced at TM-5's 'Revenue per delivery' of $24.60
+     six customer stops are priced at TM-5's 'Revenue per delivery' of $24.60
+     (the transfer to Metro Borrowdale earns no delivery charge)
      (illustrative). Goods margin is excluded — it is the selling branch's, not
      transport's. */
 export const TRIP_PL = {
   trip: 'TR-HRE-2026-08-20-05',
   vehicle: 'AHF5121 · GC103',
-  km: 73,
   costPerKm: 1.184,
   crew: { people: 2, perDay: 28.0 },
   charge414414: 21.65,
-  otherStops: 8,
+  otherStops: 6,
   revenuePerDelivery: 24.6,
 };
 
@@ -437,7 +470,7 @@ export const BEATS: Beat[] = [
   { n: 4, screen: 'SD-1', route: null, line: 'Now the cash-and-carry. A third of this is trade customers coming to collect. (mobile build)' },
   { n: 5, screen: 'SD-2', route: null, line: 'Scanning goods out. And this freezer was sold in June and sent to Kwekwe — it stops. (mobile build)' },
   { n: 6, screen: 'SD-3', route: null, line: 'Same control with no truck at all. (mobile build)' },
-  { n: 7, screen: 'DR-2', route: null, line: 'The driver accepts what the store scanned. Two people, one serial. (mobile build)' },
+  { n: 7, screen: 'D-05', route: null, line: 'The driver signs for what the store scanned — on the store’s tablet, with the clerk beside him. Two people, one serial. (mobile build)' },
   { n: 8, screen: 'DR-1/3', route: null, line: 'His day. And at the door — he switches the freezer on before anyone signs. (mobile build)' },
   { n: 9, screen: 'DR-4', route: null, line: 'He also takes cash, with no signal. Notice what it does not say. (mobile build)' },
   { n: 10, screen: 'DR-5', route: null, line: 'Nobody home. The rebook goes to the branch that sold it, by nine tomorrow. (mobile build)' },
@@ -449,7 +482,7 @@ export const BEATS: Beat[] = [
 export const RAIL = [
   { href: '/transport/board', title: 'The board', sub: 'TM-1 · unplanned work' },
   { href: '/transport/trips/build', title: 'Build a trip', sub: 'TM-2 · plan & route' },
-  { href: '/transport/live', title: 'Live & exceptions', sub: 'TM-3 · 3 open' },
+  { href: '/transport/live', title: 'Live & exceptions', sub: 'TM-3 · 4 open' },
   { href: '/transport/search', title: 'Search', sub: 'TM-4 · one number' },
   { href: '/transport/fleet/cost', title: 'Fleet cost', sub: 'TM-5 · July 2026' },
   { href: '/transport/reports', title: 'Reports', sub: 'URD 10.12.3 · what exists' },

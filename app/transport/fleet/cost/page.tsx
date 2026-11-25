@@ -5,7 +5,8 @@
  * outlier. Charts only where a chart earns its place — the rest is mono and
  * column-aligned so a finance director can read straight down. */
 
-import { AC, CAUTION_TEXT, COST_CALLOUT, COST_MONTH, COST_NOTE_YTD, COST_ROWS, N6, N7, TRIP_PL, TX, VARIANCE } from '@/lib/data';
+import { AC, CAUTION_TEXT, COST_CALLOUT, COST_MONTH, COST_NOTE_YTD, COST_ROWS, N6, N7, SEED_STOPS, TRIP_PL, TX, VARIANCE } from '@/lib/data';
+import { cachedRoute } from '@/lib/routing';
 
 export default function FleetCost() {
   return (
@@ -103,7 +104,11 @@ const usd = (n: number) => `$${n.toFixed(2)}`;
 
 function TripPL() {
   const p = TRIP_PL;
-  const running = p.km * p.costPerKm;
+  /* ⚠ The distance is TM-2's own road estimate for trip 05 in the planner's
+     order, rounded the way TM-2 prints it — read, never typed. */
+  const route = cachedRoute(SEED_STOPS.map((x) => x.suburb));
+  const km = route ? Math.round(route.km) : 0;
+  const running = km * p.costPerKm;
   const crew = p.crew.people * p.crew.perDay;
   const other = p.otherStops * p.revenuePerDelivery;
   const revenue = p.charge414414 + other;
@@ -114,7 +119,7 @@ function TripPL() {
     { label: 'invoice 414414', value: usd(p.charge414414), src: 'TM-4 record', indent: true },
     { label: `${p.otherStops} other stops × ${usd(p.revenuePerDelivery)}`, value: usd(other), src: 'TM-5 row · illustrative', indent: true },
     { label: 'Vehicle running', value: `− ${usd(running)}`, src: '', strong: true },
-    { label: `${p.km} km × $${p.costPerKm.toFixed(3)}/km`, value: '', src: 'TM-2 road estimate × TM-5 row', indent: true },
+    { label: `${km} km ×$${p.costPerKm.toFixed(3)}/km`, value: '', src: 'TM-2 road estimate × TM-5 row', indent: true },
     { label: 'Driver and crew', value: `− ${usd(crew)}`, src: '', strong: true },
     { label: `${p.crew.people} people × ${usd(p.crew.perDay)} a day`, value: '', src: 'illustrative · no wage data here', indent: true },
   ];

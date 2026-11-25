@@ -28,10 +28,13 @@ all three apps, never in one.
     Borrowdale, stop 6, receipt scan at branch), and a replenishment trip `TR-HRE-2026-08-20-12`
     (`IDO-VE-2026-08-20-0009`, VE → MW, full cases, so it can show a fill: 11.80 of 22.0 m³ — 54%).
     `TripCard.transfer` carries it; a new trip built in the room never borrows the seeded transfer.
-  - **2.4 Trip P&L on TM-5** for trip 05, computed in code from `TRIP_PL`: 73 km (TM-2's OSRM
-    estimate, not the 106 km odometer day) × $1.184/km, crew 2 × $28 (illustrative, no wage data),
-    revenue = 414414's $21.65 + 8 × $24.60 (TM-5 row, illustrative). Contribution $76.02. Every
-    row names its source.
+  - **2.4 Trip P&L on TM-5** for trip 05, computed in code: distance read from TM-2's cached OSRM
+    route for `SEED_STOPS` (90 km since the walk fixes) × $1.184/km, crew 2 × $28 (illustrative,
+    no wage data), revenue = 414414's $21.65 + 6 customer stops × $24.60 (the transfer earns no
+    charge). Contribution $6.69. Every row names its source.
+  - **Walk fixes (25 Nov):** `SEED_STOPS` is the driver's 8-stop run; `clockFor(pathname)` gives
+    each screen its moment (07:15 / 15:20 / 18:20); trip 03's driver is C. Nyathi; TM-3 carries
+    EX-000029155 from the driver's stop 5; beat 7 is D-05. Routes cache regenerated, 45/45.
   - **2.5 `/transport/reports`** (rail entry): the six URD 10.12.3 reports and by
     route/vehicle/transporter/load, each with the screen that covers it, how far, and what is not
     built. No report output is drawn; Export is dimmed and labelled.

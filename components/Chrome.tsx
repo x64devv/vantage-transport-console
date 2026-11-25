@@ -7,7 +7,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { AC, AC7, BEATS, BRANCHES, CLOCK, N4, N6, N7, RAIL, SYNC_NOTE } from '@/lib/data';
+import { AC, AC7, BEATS, BRANCHES, N4, N6, N7, RAIL, SYNC_NOTE, clockFor } from '@/lib/data';
 import { useConsole } from './ConsoleState';
 
 const LABEL: React.CSSProperties = {
@@ -18,6 +18,7 @@ const LABEL: React.CSSProperties = {
 };
 
 export function Header() {
+  const pathname = usePathname();
   return (
     <div
       style={{
@@ -44,10 +45,11 @@ export function Header() {
         Illustrative data — not Gain&rsquo;s records
       </div>
       <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 14 }}>
-        {/* ⚠ A fixed clock. The demo is set on Thursday 20 August 2026 at 07:15 and
-            every timestamp on every screen is relative to it. A live clock would
-            drift away from the seeded day within a minute. */}
-        <div className="mono" style={{ fontSize: 12 }}>{CLOCK}</div>
+        {/* ⚠ A fixed clock per screen, never a live one: a live clock would drift
+            away from the seeded day within a minute. Morning for the board and
+            builder, afternoon for TM-3, evening for search, cost and reports —
+            see clockFor in lib/data.ts. */}
+        <div className="mono" style={{ fontSize: 12 }} data-testid="clock">{clockFor(pathname)}</div>
         <div style={{ width: 1, height: 18, background: 'var(--color-divider)' }} />
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--color-neutral-700)' }}>
           <span style={{ width: 7, height: 7, background: 'var(--color-accent)', display: 'block' }} />

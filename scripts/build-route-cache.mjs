@@ -24,10 +24,13 @@ const SUB = {
   Avondale: [-17.799, 31.035], Hatfield: [-17.862, 31.11], Highfield: [-17.877, 30.99],
   Newlands: [-17.806, 31.073], Msasa: [-17.846, 31.123], Eastlea: [-17.828, 31.07],
   Braeside: [-17.846, 31.062], Hillside: [-17.86, 31.09], Cranborne: [-17.86, 31.008],
+  Highlands: [-17.79, 31.11], Chisipite: [-17.775, 31.12],
 };
 const co = (s) => SUB[s] || [-17.84, 31.05];
 
-const SEED = ['Greendale', 'Greendale', 'Newlands', 'Eastlea', 'Msasa', 'Braeside', 'Hillside', 'Cranborne', 'Waterfalls'];
+/* ⚠ Trip 05 is the driver's run since the 25 Nov cross-app walk — keep this in
+   step with SEED_STOPS in lib/data.ts. */
+const SEED = ['Highlands', 'Chisipite', 'Greendale', 'Greendale', 'Msasa', 'Borrowdale', 'Avondale', 'Hatfield'];
 const POOL = ['Greendale', 'Avondale', 'Newlands', 'Msasa', 'Eastlea', 'Braeside', 'Hillside', 'Hatfield', 'Cranborne', 'Waterfalls'];
 
 function haversineKm(a, b) {
