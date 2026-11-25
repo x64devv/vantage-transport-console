@@ -7,8 +7,8 @@
  *   measured    "Load"  7.07 of 22.0 m³ — 32%   + a 6px bar at 32%
  *   unmeasured  "LOAD"  5 lines with no dimensions        "no % shown", NO BAR
  *
- * Nine trips in ten are the second, because TVSH holds no cube data for
- * furniture. A zero-width bar, a greyed bar, an empty chart or an estimated
+ * Most trips are the second, because a mixed or loose order has no pack
+ * sizes in the item master (illustrative Gain day). A zero-width bar, a greyed bar, an empty chart or an estimated
  * percentage would each be a lie about what the system knows — and would make
  * the ordinary case look like a fault. It is not a fault. It is Thursday.
  */

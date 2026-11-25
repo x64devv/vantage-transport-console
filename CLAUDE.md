@@ -7,6 +7,25 @@
 
 ---
 
+## 0. ⚠⚠ Gain re-seed (25 Nov 2026) — branch `gain/reseed`
+
+Re-seeded to show Gain (URD 10.11 / 10.12), demo only. The shared identity map, which the dispatch
+tablet and the driver app follow too, is **`../GAIN-RESEED.md`** — change an identity there and in
+all three apps, never in one.
+
+- **Everything business-shaped is illustrative, not Gain's records:** branch names (codes kept),
+  registrations and fleet numbers (`GC` prefix; the run is `AHF5121 · GC103`, the refused truck
+  `AHB2107`), consignments and goods (wholesale cases plus a few appliances), invoice 414414's
+  reference and fiscal signature, and every TM-5 figure (July 2026). The header carries
+  *"Illustrative data — not Gain's records"* on every screen.
+- **TVSH's real data is gone from this branch** — Fleet Register regs, the April 2026 Transport
+  Report, the real fiscal signature. Do not reintroduce it; §6 below describes the TVSH build.
+- **Unchanged:** suburbs, coordinates, routes cache, trip ids, clocks, receipt `PAY-101-D204-000037`,
+  `USD 1 150.00`, people's names, and the four survivors in §4.
+- The sections below are the TVSH build's history; read their identities through the map above.
+
+---
+
 ## 1. What this is, and what it is not
 
 A **five-screen Next.js console**, static export, all state client-side, no server. It is the

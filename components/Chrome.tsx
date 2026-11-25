@@ -31,6 +31,18 @@ export function Header() {
       <div style={{ ...LABEL, borderLeft: '1px solid var(--color-divider)', paddingLeft: 20 }}>
         Harare depot · planner view
       </div>
+      {/* ⚠⚠ Gain re-seed, 25 Nov 2026. Every branch, vehicle, consignment and
+          figure on these screens is invented for the demo (../GAIN-RESEED.md).
+          Said on every screen, in the chrome, so no screenshot can lose it. */}
+      <div
+        data-illustrative
+        style={{
+          ...LABEL, color: 'var(--color-accent-800)', border: '1px solid var(--color-accent)',
+          background: 'var(--color-accent-100)', padding: '3px 8px',
+        }}
+      >
+        Illustrative data — not Gain&rsquo;s records
+      </div>
       <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 14 }}>
         {/* ⚠ A fixed clock. The demo is set on Thursday 20 August 2026 at 07:15 and
             every timestamp on every screen is relative to it. A live clock would

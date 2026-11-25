@@ -1,5 +1,10 @@
 # Vantage Transport Management console — demo build
 
+> **Branch `gain/reseed` (25 Nov 2026): re-seeded for the Gain demo.** Every branch
+> name, vehicle, consignment, SKU and figure is **illustrative, not Gain's records**,
+> and the chrome says so on every screen. The shared identity map is
+> `../GAIN-RESEED.md`. TVSH's real data has been removed from this branch.
+
 > ## ⚠⚠ This is a temporary demo. It is not the module.
 >
 > It was built in a week to be shown to TVSH department heads and directors on
@@ -66,7 +71,7 @@ NEXT_PUBLIC_DEMO_BAR=off npm run build   # build without the demo running-order 
 They are the reason an operator believes the rest of it. If a change kills one
 of these, it is the wrong change.
 
-1. **`AFR5403` is refused for an expired certificate of fitness.** The refusal is
+1. **`AHB2107` is refused for an expired certificate of fitness.** The refusal is
    the label on the row — not a tooltip, not a disabled control with a mystery.
    Clicking it reveals the reason and names the grant the planner does not hold.
    **It never assigns.**
@@ -78,8 +83,8 @@ of these, it is the wrong change.
    board"*. Its deliveries are genuinely absent from the board.
 4. **A load that cannot be measured says so.** `4 lines with no dimensions` and
    **no bar at all** — never a zero bar, never an empty chart, never a guess.
-   Nine trips in ten are this form, because TVSH has no dimension data for
-   furniture. It must read as an ordinary state, not an error.
+   Most trips are this form, because a mixed or loose order has no pack sizes
+   in the item master. It must read as an ordinary state, not an error.
 
 And one rule that produces them: **never let a straight line pretend to be a
 route.** Map legs are dashed until a road answer arrives, and stay dashed if it
@@ -121,26 +126,13 @@ paraphrase them.
 
 ## What is real in the data, and what is not
 
-`lib/data.ts` says this line by line; the short version:
-
-**Real** — branch codes and names, the zone map and its nominated days, vehicle
-registrations, fleet numbers, makes and models, Harare suburbs, invoice 414414
-and its fiscal signature, and every aggregate on TM-5 (60 vehicles, 117,169 km,
-$1.212 / $1.540 per km, $38,371, 6.59 against a 6.64 standard, 3,179 deliveries,
-$18.71, and the 395 min / 11 stops against 233 min / 9 stops on the board).
-
-**Invented, and openly so** — driver and crew names, customer names and
-addresses, vehicle cubic capacities, compliance expiry dates, per-vehicle fuel
-variance, and the individual consignments of this day. TVSH holds no cube data
-and no compliance expiry dates. Attaching a real employee's name to a fictional
-serial mismatch, in front of directors, would be a bad idea; vehicles are real
-because a fleet manager recognises his own trucks and that recognition is worth
-something.
-
-⚠ The prototype's arrays disagreed with the Fleet Register on four vehicles out
-of five and used Harare **suburbs** as branch names. That has been corrected —
-see `lib/data.ts` and `CLAUDE.md` §6. If you re-seed from the prototype, you will
-reintroduce trucks TVSH does not own.
+On this branch: **nothing in the business data is real.** Branch names (codes
+kept), vehicle registrations and fleet numbers, consignments, SKUs, the invoice
+414414 record and its fiscal signature, driver, crew and customer names, cubic
+capacities, compliance dates and every TM-5 figure are illustrative for the Gain
+demo. Harare suburbs, the zone letters and the road routes in
+`lib/routes-cache.ts` are real geography. When Gain's own data arrives,
+`lib/data.ts` and `../GAIN-RESEED.md` are what get replaced.
 
 ## Deliberate limits
 

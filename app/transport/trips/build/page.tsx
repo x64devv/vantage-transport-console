@@ -41,7 +41,7 @@ export default function BuildTrip() {
     ? `${dimless} lines with no dimensions`
     : `${cube.toFixed(2)} of ${cap.toFixed(1)} m³ — ${Math.round((cube / cap) * 100)}%`;
   const capacityNote = dimless
-    ? 'No percentage can be computed. Beds and lounge suites are unmeasured. Truck-type eligibility: 3.5t curtain-side or larger.'
+    ? 'No percentage can be computed. Mixed and loose orders have no pack sizes in the item master. Truck-type eligibility: 3.5t curtain-side or larger.'
     : 'Every line on this trip is measured, so a real fill percentage is shown. Truck-type eligibility: 3.5t curtain-side or larger.';
 
   const shown = suggestion || stops;

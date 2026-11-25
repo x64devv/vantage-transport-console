@@ -5,14 +5,14 @@
  * outlier. Charts only where a chart earns its place — the rest is mono and
  * column-aligned so a finance director can read straight down. */
 
-import { AC, CAUTION_TEXT, COST_CALLOUT, COST_NOTE_YTD, COST_ROWS, N6, N7, TX, VARIANCE } from '@/lib/data';
+import { AC, CAUTION_TEXT, COST_CALLOUT, COST_MONTH, COST_NOTE_YTD, COST_ROWS, N6, N7, TX, VARIANCE } from '@/lib/data';
 
 export default function FleetCost() {
   return (
     <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 16, padding: '14px 18px 10px' }}>
         <h3 style={{ margin: 0 }}>What the fleet costs</h3>
-        <div style={{ fontSize: 11.5, color: N7, paddingBottom: 3 }}>April 2026 · 60 active vehicles</div>
+        <div style={{ fontSize: 11.5, color: N7, paddingBottom: 3 }}>{COST_MONTH} · 38 active vehicles · illustrative</div>
       </div>
 
       {/* flex:1 so the 2px rule between the two columns runs the full height of
@@ -22,9 +22,9 @@ export default function FleetCost() {
           <div style={{ fontSize: 10, letterSpacing: '.1em', textTransform: 'uppercase', color: N6, marginBottom: 8 }}>
             Cost of running
           </div>
-          {/* ⚠⚠ Every figure below is real, from TVSH's April 2026 Transport
-              Report. A director in the room will recognise them. Do not round or
-              re-derive any of them to make a column line up. */}
+          {/* ⚠⚠ Illustrative figures for the Gain demo (lib/data.ts COST_ROWS).
+              The month label says so on screen. Do not round or re-derive any of
+              them to make a column line up. */}
           {COST_ROWS.map((c) => (
             <div
               key={c.label}
@@ -44,7 +44,7 @@ export default function FleetCost() {
           ))}
           <div style={{ marginTop: 14, padding: '10px 12px', background: 'var(--color-surface)' }}>
             <div style={{ fontSize: 11.5 }}>
-              Third-party carriers ran <span className="mono">{COST_NOTE_YTD.april}</span> in April against a
+              Third-party carriers ran <span className="mono">{COST_NOTE_YTD.month}</span> in July against a
               year-to-date <span className="mono">{COST_NOTE_YTD.ytd}</span> across {COST_NOTE_YTD.carriers} carriers.
               Every hired trip on the board is priced against this line.
             </div>
@@ -56,7 +56,7 @@ export default function FleetCost() {
             <div style={{ fontSize: 10, letterSpacing: '.1em', textTransform: 'uppercase', color: N6 }}>
               Fuel variance against target
             </div>
-            <div style={{ fontSize: 11, color: N6, marginLeft: 'auto' }}>April</div>
+            <div style={{ fontSize: 11, color: N6, marginLeft: 'auto' }}>July</div>
           </div>
 
           {VARIANCE.map((r) => {
@@ -85,7 +85,7 @@ export default function FleetCost() {
 
           <div style={{ marginTop: 12, padding: '10px 12px', border: '1px solid var(--color-accent)', background: 'var(--color-accent-100)' }}>
             <div style={{ fontSize: 11.5, color: 'var(--color-accent-800)' }}>
-              <span className="mono">AFR5403</span> {COST_CALLOUT}
+              <span className="mono">AHB2107</span> {COST_CALLOUT}
             </div>
           </div>
         </div>

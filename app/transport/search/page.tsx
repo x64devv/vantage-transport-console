@@ -1,7 +1,7 @@
 'use client';
 
-/* TM-4 — Search. The closing screen, and the only one showing something TVSH
- * cannot do at all today: one number, and everything it touches. */
+/* TM-4 — Search. The closing screen, and the only one showing something a paper
+ * process cannot do at all: one number, and everything it touches. */
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
