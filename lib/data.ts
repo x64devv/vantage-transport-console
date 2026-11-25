@@ -199,7 +199,17 @@ export type TripCard = {
   stops?: number; service?: number; progress?: string; serviceText?: string;
   capText: string; capPct: number | null;
   statusColor: string; edge: string; current?: boolean;
+  /** ⚠ Phase 2 (2.2): a branch replenishment riding on, or making up, a trip.
+   *  Named on the card so a transfer is never just one more stop. */
+  transfer?: string;
 };
+
+/* ── 2.2 Branch replenishment ─────────────────────────────────────────────
+   ⚠ Illustrative (../GAIN-RESEED.md, Phase 2). Trip 05 carries the transfer the
+   dispatch tablet and the driver app both know — IDO-VE-2026-08-20-0007, stop 6,
+   receipt scanned at Metro Borrowdale. Trip 12 is a replenishment run on its own:
+   full cases, so its pack sizes are on file and it CAN show a fill. */
+export const SEED_TRIP_TRANSFER = 'Transfer IDO-VE-2026-08-20-0007 · VE → BR Metro Borrowdale · stop 6 · receipt scan at branch';
 
 export const BUILDING_STATIC: TripCard[] = [
   { id: 'TR-HRE-2026-08-20-04', zone: 'Zone C', vehicle: 'Unassigned', stops: 6, service: 187, status: 'Planned', capText: '3 lines with no dimensions', capPct: null, statusColor: N7, edge: 'transparent' },
@@ -208,6 +218,7 @@ export const BUILDING_STATIC: TripCard[] = [
   // 9.40 of 22.0 = 42.7%. AHF5126 is GC104, a 22.0 m³ UD Kuzer.
   { id: 'TR-HRE-2026-08-20-08', zone: 'Zone F', vehicle: 'AHF5126 · GC104', stops: 8, service: 205, status: 'Planned', capText: '9.40 of 22.0 m³ — 43%', capPct: 43, statusColor: N7, edge: 'transparent' },
   // ⚠ 233 min / 9 stops is quoted in the footer teaching line (illustrative).
+  { id: 'TR-HRE-2026-08-20-12', zone: 'Transfer', vehicle: 'Unassigned', stops: 1, service: 40, status: 'Planned', capText: '11.80 of 22.0 m³ — 54%', capPct: 54, statusColor: N7, edge: 'transparent', transfer: 'Transfer IDO-VE-2026-08-20-0009 · VE → MW Mbare Wholesale · full cases' },
   { id: 'TR-HRE-2026-08-20-09', zone: 'Zone F', vehicle: 'AHG6012 · GC107', stops: 9, service: 233, status: 'Planned', capText: '7.07 of 22.0 m³ — 32%', capPct: 32, statusColor: N7, edge: 'transparent' },
 ];
 
@@ -384,6 +395,30 @@ export const VARIANCE = [
   { reg: 'AHG6019', pct: '+4.6%', v: 4.6 },
 ];
 
+/* ── 2.4 Trip P&L ─────────────────────────────────────────────────────────
+   ⚠⚠ Every input is either already on a screen in this console or labelled
+   illustrative on this one. The arithmetic is done here, in code, from those
+   inputs — no figure is typed in as a result.
+   - 73 km is TM-2's OSRM road estimate for the seeded trip's stops (the builder
+     prints '73 km by road'). Not the odometer: the driver app's 106 km odometer
+     day includes the two depot legs, which are not routed.
+   - $1.184/km is TM-5's 'Cost per km, excl. 3PL' row (illustrative).
+   - Crew cost is illustrative: no wage data exists in this build.
+   - Revenue: invoice 414414's USD 21.65 delivery charge is on TM-4; the other
+     eight stops are priced at TM-5's 'Revenue per delivery' of $24.60
+     (illustrative). Goods margin is excluded — it is the selling branch's, not
+     transport's. */
+export const TRIP_PL = {
+  trip: 'TR-HRE-2026-08-20-05',
+  vehicle: 'AHF5121 · GC103',
+  km: 73,
+  costPerKm: 1.184,
+  crew: { people: 2, perDay: 28.0 },
+  charge414414: 21.65,
+  otherStops: 8,
+  revenuePerDelivery: 24.6,
+};
+
 export const COST_NOTE_YTD = { month: '$13,355', ytd: '$131,920', carriers: 5 };
 export const COST_CALLOUT =
   'burns 9.9% more than target and its certificate of fitness expired on 12 August. It is off the road on both counts — this is the vehicle the screen exists to find.';
@@ -415,4 +450,5 @@ export const RAIL = [
   { href: '/transport/live', title: 'Live & exceptions', sub: 'TM-3 · 3 open' },
   { href: '/transport/search', title: 'Search', sub: 'TM-4 · one number' },
   { href: '/transport/fleet/cost', title: 'Fleet cost', sub: 'TM-5 · July 2026' },
+  { href: '/transport/reports', title: 'Reports', sub: 'URD 10.12.3 · what exists' },
 ];

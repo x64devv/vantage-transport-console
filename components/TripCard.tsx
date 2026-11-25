@@ -33,6 +33,15 @@ export function TripCardView({ t, href }: { t: Card; href: string }) {
           {t.serviceText ?? `${t.service} min`}
         </div>
       </div>
+      {t.transfer && (
+        <div
+          data-testid="transfer"
+          className="mono"
+          style={{ marginTop: 6, fontSize: 10.5, color: 'var(--color-neutral-800)', borderLeft: '2px solid var(--color-text)', paddingLeft: 6 }}
+        >
+          {t.transfer}
+        </div>
+      )}
       <div style={{ marginTop: 7, paddingTop: 7, borderTop: '1px solid var(--color-neutral-300)' }}>
         <LoadLine text={t.capText} pct={t.capPct} textOnly={!!t.progress} />
       </div>
