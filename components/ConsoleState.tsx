@@ -42,6 +42,16 @@ type Ctx = {
 
 const ConsoleCtx = createContext<Ctx | null>(null);
 
+/* ⚠ A reload must not lose the trip being built — someone will refresh mid-demo,
+   or the projector will renegotiate and the tab reloads. sessionStorage, not
+   localStorage: it survives a reload and dies with the tab, so a rehearsal never
+   leaks into the real run. Suggestions and road answers are recomputed. */
+const STORE_KEY = 'vantage-console-v1';
+type Saved = {
+  tripId: string; tripZone: string; stops: Consignment[];
+  assigned: string | null; rejected: boolean; beat: number;
+};
+
 export function ConsoleProvider({ children }: { children: React.ReactNode }) {
   const [tripId, setTripId] = useState(SEED_TRIP_ID);
   const [tripZone, setTripZone] = useState(SEED_TRIP_ZONE);
@@ -77,6 +87,30 @@ export function ConsoleProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => { ensureRoute(stops); }, [stops, ensureRoute]);
   useEffect(() => { if (suggestion) ensureRoute(suggestion); }, [suggestion, ensureRoute]);
+
+  /* Restore after mount (the export is prerendered, so the first paint must match
+     the seed), and only start saving once that has happened. */
+  const [restored, setRestored] = useState(false);
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem(STORE_KEY);
+      if (raw) {
+        const s = JSON.parse(raw) as Saved;
+        if (Array.isArray(s.stops)) {
+          setTripId(s.tripId); setTripZone(s.tripZone); setStops(s.stops);
+          setAssigned(s.assigned); setRejected(!!s.rejected); setBeat(s.beat || 0);
+        }
+      }
+    } catch { /* storage blocked or the entry is unreadable — the seed stands */ }
+    setRestored(true);
+  }, []);
+  useEffect(() => {
+    if (!restored) return;
+    try {
+      const s: Saved = { tripId, tripZone, stops, assigned, rejected, beat };
+      sessionStorage.setItem(STORE_KEY, JSON.stringify(s));
+    } catch { /* storage blocked — the console still works, it just forgets on reload */ }
+  }, [restored, tripId, tripZone, stops, assigned, rejected, beat]);
 
   const pool = useMemo(
     () => POOL_ALL.filter((c) => !stops.some((s) => s.inv === c.inv)),
