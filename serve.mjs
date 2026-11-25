@@ -11,9 +11,11 @@
 
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
-import { extname, join, normalize, resolve } from 'node:path';
+import { dirname, extname, join, normalize, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const ROOT = resolve('out');
+// Resolved from this file, not the shell's directory, so it starts from anywhere.
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), 'out');
 const PORT = Number(process.env.PORT || 4173);
 
 const TYPES = {
