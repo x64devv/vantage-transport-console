@@ -206,10 +206,12 @@ export type TripCard = {
 
 /* ── 2.2 Branch replenishment ─────────────────────────────────────────────
    ⚠ Illustrative (../GAIN-RESEED.md, Phase 2). Trip 05 carries the transfer the
-   dispatch tablet and the driver app both know — IDO-VE-2026-08-20-0007, stop 6,
+   dispatch tablet and the driver app both know — IDO-VE-2026-08-20-0007,
+   (⚠ no stop number here: TM-2's stop list for this trip is not the driver's run;
+   see the cross-app walk note in CLAUDE.md §0),
    receipt scanned at Metro Borrowdale. Trip 12 is a replenishment run on its own:
    full cases, so its pack sizes are on file and it CAN show a fill. */
-export const SEED_TRIP_TRANSFER = 'Transfer IDO-VE-2026-08-20-0007 · VE → BR Metro Borrowdale · stop 6 · receipt scan at branch';
+export const SEED_TRIP_TRANSFER = 'Transfer IDO-VE-2026-08-20-0007 · VE → BR Metro Borrowdale · receipt scan at branch';
 
 export const BUILDING_STATIC: TripCard[] = [
   { id: 'TR-HRE-2026-08-20-04', zone: 'Zone C', vehicle: 'Unassigned', stops: 6, service: 187, status: 'Planned', capText: '3 lines with no dimensions', capPct: null, statusColor: N7, edge: 'transparent' },

@@ -38,6 +38,8 @@ all three apps, never in one.
   - Checked 25 Nov in Edge via Playwright: 39/39 — all seven routes render with the marker and no
     page errors, the four survivors still read, the P&L arithmetic, every report row and link.
 
+- **Cross-app walk, 25 Nov:** findings and open decisions are in `../GAIN-RESEED.md`, last section.
+
 ---
 
 ## 1. What this is, and what it is not
