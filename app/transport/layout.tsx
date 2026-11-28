@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { ConsoleProvider } from '@/components/ConsoleState';
 import { DemoBar, Header, Rail, SyncStrip } from '@/components/Chrome';
 
@@ -9,17 +10,36 @@ import { DemoBar, Header, Rail, SyncStrip } from '@/components/Chrome';
 const DEMO_BAR = process.env.NEXT_PUBLIC_DEMO_BAR !== 'off';
 
 /* The design is a fixed 1600 × 1000 working area, used for hours by two roles at
-   a desk. It is centred on the neutral-300 desk rather than stretched, so the
+   a desk. It is centred on the neutral-300 desk (and scaled down to fit) rather than stretched, so the
    densities the design was drawn at survive whatever the demo laptop's screen
    turns out to be. */
+const W = 1600;
+const H = DEMO_BAR ? 1000 : 963;
+
 export default function TransportLayout({ children }: { children: React.ReactNode }) {
+  /* ⚠ Fit to the window (28 Nov): the page must never scroll in front of the
+     room. The 1600 × H working area is scaled down as one piece, so the drawn
+     densities keep their proportions; it is never scaled above full size.
+     Same approach as the dispatch tablet. Leaflet 1.9 reads the ancestor scale,
+     so map clicks still land. */
+  const [scale, setScale] = useState(1);
+  useEffect(() => {
+    const fit = () => setScale(Math.min(1, window.innerWidth / W, window.innerHeight / H));
+    fit();
+    window.addEventListener('resize', fit);
+    return () => window.removeEventListener('resize', fit);
+  }, []);
+
   return (
-    <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'start center', padding: 0 }}>
+    <div style={{ height: '100vh', overflow: 'hidden', display: 'grid', placeItems: 'center', padding: 0 }}>
       <ConsoleProvider>
+        <div style={{ width: W * scale, height: H * scale }}>
         <div
           style={{
-            width: 1600,
-            height: DEMO_BAR ? 1000 : 963,
+            transform: `scale(${scale})`,
+            transformOrigin: 'top left',
+            width: W,
+            height: H,
             display: 'flex',
             flexDirection: 'column',
             background: 'var(--color-bg)',
@@ -36,6 +56,7 @@ export default function TransportLayout({ children }: { children: React.ReactNod
             <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>{children}</div>
           </div>
           {DEMO_BAR ? <DemoBar /> : null}
+        </div>
         </div>
       </ConsoleProvider>
     </div>

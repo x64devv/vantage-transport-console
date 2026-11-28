@@ -6,8 +6,9 @@
  * ⚠ Two statements from the original are corrected here rather than carried
  * forward, because they are no longer true of this build: route estimates are
  * now real road figures from OSRM with a 1.18 city allowance (not straight-line
- * at 26 km/h), and the vehicle identities are the Fleet Register's. Everything
- * else is the handoff's own words.
+ * at 26 km/h). ⚠ Re-seeded for the Gain demo on 25 Nov 2026: every identity and
+ * figure named here is illustrative (../GAIN-RESEED.md). Everything else is the
+ * handoff's own words.
  */
 
 import Link from 'next/link';
@@ -36,8 +37,8 @@ export default function Notes() {
     <div style={{ flex: 1, minHeight: 0, overflow: 'auto', padding: '18px 26px 40px' }}>
       <h3 style={{ margin: 0 }}>Vantage Transport Management · demo notes</h3>
       <div style={{ fontSize: 11.5, color: N7, marginTop: 4 }}>
-        What each screen does, and what each pane is for. Harare depot, Thursday 20 August 2026 · prepared for the
-        TVSH demo, 26 August 2026.
+        What each screen does, and what each pane is for. Harare depot, Thursday 20 August 2026 · re-seeded for the
+        Gain demo. Every branch, vehicle, consignment and figure is illustrative, not Gain’s records.
       </div>
 
       <h4 style={H}>How to run it</h4>
@@ -76,15 +77,15 @@ export default function Notes() {
         party legitimately reports nothing between depot and door.
       </Pane>
       <Pane name="Load line">
-        Either a real percentage or a plain count of unmeasured lines. Both are normal states. Nine trips in ten cannot
-        show a fill percentage, because TVSH has no dimension data for furniture. The honest form (
+        Either a real percentage or a plain count of unmeasured lines. Both are normal states. Most trips cannot show a
+        fill percentage, because a mixed or loose order has no pack sizes in the item master. The honest form (
         <span className="mono">5 lines with no dimensions</span>, no bar) sits beside the working form (
         <span className="mono">7.07 of 22.0 m³ — 32%</span>). The honest one must not look like an error; today it is
         the normal case.
       </Pane>
       <p style={{ ...P, marginTop: 10 }}>
         The service-time column is the other quiet point: 395 minutes across 11 stops against 233 across 9. Nearly the
-        same stop count, almost three hours apart, because one trip is beds and the other is appliances.
+        same stop count, almost three hours apart, because one trip is mixed tuckshop orders and the other is full cases.
       </p>
 
       <h4 style={H}>TM-2 · Build a trip</h4>
@@ -120,7 +121,7 @@ export default function Notes() {
       <Pane name="Vehicle picker">
         The list a planner chooses from — and the point of the screen.{' '}
         <strong>The refusal is the label, not a tooltip.</strong>{' '}
-        <span className="mono">AFR5403 — TVS87 · UD Croner · 28.0 m³ · Certificate of Fitness expired 12 August</span>{' '}
+        <span className="mono">AHB2107 — GC87 · UD Croner · 28.0 m³ · Certificate of Fitness expired 12 August</span>{' '}
         reads its reason before anyone clicks. Two more are flagged in caution rather than alert: COF expiring 31
         August, insurance expiring 26 August — available, but visibly close. Overriding a compliance block needs a
         separate grant. A truck dispatched without valid papers is a truck impounded with a customer’s goods on it.
@@ -138,7 +139,7 @@ export default function Notes() {
       </Pane>
       <Pane name="Exceptions">
         Everything that went wrong today, oldest first. Click a row for the detail and what happens next. The{' '}
-        <em>fault</em> column is a billing field, so it is styled as a fact rather than an accusation: TVSH, customer,
+        <em>fault</em> column is a billing field, so it is styled as a fact rather than an accusation: Gain, customer,
         or blank. The third row — six deliveries signed with the photographs still queued for depot wifi — is not a
         failure. Proof arriving later is a visible state rather than a silent one; outcomes, signatures and cash go out
         immediately, images wait for wifi.
@@ -146,7 +147,7 @@ export default function Notes() {
 
       <h4 style={H}>TM-4 · Search</h4>
       <p style={P}>
-        The closing screen, and the only one showing something TVSH cannot do at all today. One field takes an invoice
+        The closing screen, and the only one showing something a paper process cannot do at all. One field takes an invoice
         number, a serial, a vehicle registration or a customer name and returns everything that number touches, as one
         chronological story: invoice and fiscal identity, branch, customer, address with a driver-confirmed pin, goods
         with serials, the scan out, the trip and vehicle, driver and crew, geofenced departure and arrival, the outcome
@@ -154,18 +155,18 @@ export default function Notes() {
         what was posted.
       </p>
       <p style={P}>
-        Today the invoice, the Issue Distribution Order, the Confirmation Note and the Driver Allocation Book each carry
+        On paper, the invoice, the delivery note, the gate pass and the trip sheet each carry
         their own number and share no key — a person in an office reconciles them by hand. Read this screen out loud;
         that is the whole argument.
       </p>
 
       <h4 style={H}>TM-5 · Fleet cost</h4>
       <p style={P}>
-        The director’s screen, from TVSH’s own April 2026 figures: 60 active vehicles, 117,169 km, $1.212 per km
-        excluding third parties and $1.540 including them, fuel and maintenance broken out per km and in dollars,
+        The director’s screen, with illustrative July 2026 figures: 38 active vehicles, 64,210 km, $1.184 per km
+        excluding third parties and $1.392 including them, fuel and maintenance broken out per km and in dollars,
         third-party spend for the month against year to date, fuel efficiency against standard, deliveries and revenue
         per delivery. Right-hand pane is per-vehicle fuel variance against target, which exists to find one row:
-        AFR5403, 9.9% worse than target — the same truck the compliance block refused on TM-2.
+        AHB2107, 9.9% worse than target — the same truck the compliance block refused on TM-2.
       </p>
 
       <h4 style={H}>Deliberate limits of this demo</h4>
@@ -191,10 +192,10 @@ export default function Notes() {
           Not in this build. They are the mobile surfaces and carry the offline burden.
         </Pane>
         <Pane name="Data">
-          Representative Harare consignments. Branches, zones, vehicle registrations, fleet numbers and makes are
-          TVSH’s own; driver and customer names, vehicle cubic capacities and compliance dates are invented, because
-          TVSH holds no capacity or expiry data and attaching a real employee to a fictional serial mismatch in front of
-          directors is a bad idea. Fleet cost figures are April 2026 actuals as supplied.
+          Illustrative, not Gain’s records. Branch names, vehicle registrations and fleet numbers, consignments,
+          SKUs, driver and customer names, cubic capacities, compliance dates and every fleet cost figure are invented
+          for this demo, because no Gain branch list, fleet register or cost report was available. Harare suburbs and
+          road routes are real geography. When Gain’s own data arrives, it replaces the seed — see GAIN-RESEED.md.
         </Pane>
       </div>
 

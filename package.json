@@ -2,13 +2,14 @@
   "name": "vantage-transport-console",
   "version": "0.1.0",
   "private": true,
-  "description": "Demo build of the Vantage Transport Management console (TVSH). Temporary \u2014 see README.",
+  "description": "Demo build of the Vantage Transport Management console (TVSH). Temporary — see README.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "node serve.mjs",
     "lint": "next lint",
-    "routes": "node scripts/build-route-cache.mjs"
+    "routes": "node scripts/build-route-cache.mjs",
+    "walk": "node scripts/walk.mjs"
   },
   "dependencies": {
     "leaflet": "1.9.4",

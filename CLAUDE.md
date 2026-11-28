@@ -7,6 +7,44 @@
 
 ---
 
+## 0. ⚠⚠ Gain re-seed (25 Nov 2026) — branch `gain/reseed`
+
+Re-seeded to show Gain (URD 10.11 / 10.12), demo only. The shared identity map, which the dispatch
+tablet and the driver app follow too, is **`../GAIN-RESEED.md`** — change an identity there and in
+all three apps, never in one.
+
+- **Everything business-shaped is illustrative, not Gain's records:** branch names (codes kept),
+  registrations and fleet numbers (`GC` prefix; the run is `AHF5121 · GC103`, the refused truck
+  `AHB2107`), consignments and goods (wholesale cases plus a few appliances), invoice 414414's
+  reference and fiscal signature, and every TM-5 figure (July 2026). The header carries
+  *"Illustrative data — not Gain's records"* on every screen.
+- **TVSH's real data is gone from this branch** — Fleet Register regs, the April 2026 Transport
+  Report, the real fiscal signature. Do not reintroduce it; §6 below describes the TVSH build.
+- **Unchanged:** suburbs, coordinates, routes cache, trip ids, clocks, receipt `PAY-101-D204-000037`,
+  `USD 1 150.00`, people's names, and the four survivors in §4.
+- The sections below are the TVSH build's history; read their identities through the map above.
+- **Phase 2 (25 Nov), URD 10.12 gaps, demo only:**
+  - **2.2 transfers on TM-1:** trip 05's card names `IDO-VE-2026-08-20-0007` (VE → BR Metro
+    Borrowdale, stop 6, receipt scan at branch), and a replenishment trip `TR-HRE-2026-08-20-12`
+    (`IDO-VE-2026-08-20-0009`, VE → MW, full cases, so it can show a fill: 11.80 of 22.0 m³ — 54%).
+    `TripCard.transfer` carries it; a new trip built in the room never borrows the seeded transfer.
+  - **2.4 Trip P&L on TM-5** for trip 05, computed in code: distance read from TM-2's cached OSRM
+    route for `SEED_STOPS` (90 km since the walk fixes) × $1.184/km, crew 2 × $28 (illustrative,
+    no wage data), revenue = 414414's $21.65 + 6 customer stops × $24.60 (the transfer earns no
+    charge). Contribution $6.69. Every row names its source.
+  - **Walk fixes (25 Nov):** `SEED_STOPS` is the driver's 8-stop run; `clockFor(pathname)` gives
+    each screen its moment (07:15 / 15:20 / 18:20); trip 03's driver is C. Nyathi; TM-3 carries
+    EX-000029155 from the driver's stop 5; beat 7 is D-05. Routes cache regenerated, 45/45.
+  - **2.5 `/transport/reports`** (rail entry): the six URD 10.12.3 reports and by
+    route/vehicle/transporter/load, each with the screen that covers it, how far, and what is not
+    built. No report output is drawn; Export is dimmed and labelled.
+  - Checked 25 Nov in Edge via Playwright: 39/39 — all seven routes render with the marker and no
+    page errors, the four survivors still read, the P&L arithmetic, every report row and link.
+
+- **Cross-app walk, 25 Nov:** findings and open decisions are in `../GAIN-RESEED.md`, last section.
+
+---
+
 ## 1. What this is, and what it is not
 
 A **five-screen Next.js console**, static export, all state client-side, no server. It is the

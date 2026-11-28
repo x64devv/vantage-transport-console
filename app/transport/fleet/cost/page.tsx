@@ -5,14 +5,15 @@
  * outlier. Charts only where a chart earns its place — the rest is mono and
  * column-aligned so a finance director can read straight down. */
 
-import { AC, CAUTION_TEXT, COST_CALLOUT, COST_NOTE_YTD, COST_ROWS, N6, N7, TX, VARIANCE } from '@/lib/data';
+import { AC, CAUTION_TEXT, COST_CALLOUT, COST_MONTH, COST_NOTE_YTD, COST_ROWS, N6, N7, SEED_STOPS, TRIP_PL, TX, VARIANCE } from '@/lib/data';
+import { cachedRoute } from '@/lib/routing';
 
 export default function FleetCost() {
   return (
     <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 16, padding: '14px 18px 10px' }}>
         <h3 style={{ margin: 0 }}>What the fleet costs</h3>
-        <div style={{ fontSize: 11.5, color: N7, paddingBottom: 3 }}>April 2026 · 60 active vehicles</div>
+        <div style={{ fontSize: 11.5, color: N7, paddingBottom: 3 }}>{COST_MONTH} · 38 active vehicles · illustrative</div>
       </div>
 
       {/* flex:1 so the 2px rule between the two columns runs the full height of
@@ -22,9 +23,9 @@ export default function FleetCost() {
           <div style={{ fontSize: 10, letterSpacing: '.1em', textTransform: 'uppercase', color: N6, marginBottom: 8 }}>
             Cost of running
           </div>
-          {/* ⚠⚠ Every figure below is real, from TVSH's April 2026 Transport
-              Report. A director in the room will recognise them. Do not round or
-              re-derive any of them to make a column line up. */}
+          {/* ⚠⚠ Illustrative figures for the Gain demo (lib/data.ts COST_ROWS).
+              The month label says so on screen. Do not round or re-derive any of
+              them to make a column line up. */}
           {COST_ROWS.map((c) => (
             <div
               key={c.label}
@@ -44,11 +45,13 @@ export default function FleetCost() {
           ))}
           <div style={{ marginTop: 14, padding: '10px 12px', background: 'var(--color-surface)' }}>
             <div style={{ fontSize: 11.5 }}>
-              Third-party carriers ran <span className="mono">{COST_NOTE_YTD.april}</span> in April against a
+              Third-party carriers ran <span className="mono">{COST_NOTE_YTD.month}</span> in July against a
               year-to-date <span className="mono">{COST_NOTE_YTD.ytd}</span> across {COST_NOTE_YTD.carriers} carriers.
               Every hired trip on the board is priced against this line.
             </div>
           </div>
+
+          <TripPL />
         </div>
 
         <div style={{ padding: '14px 18px' }}>
@@ -56,7 +59,7 @@ export default function FleetCost() {
             <div style={{ fontSize: 10, letterSpacing: '.1em', textTransform: 'uppercase', color: N6 }}>
               Fuel variance against target
             </div>
-            <div style={{ fontSize: 11, color: N6, marginLeft: 'auto' }}>April</div>
+            <div style={{ fontSize: 11, color: N6, marginLeft: 'auto' }}>July</div>
           </div>
 
           {VARIANCE.map((r) => {
@@ -85,10 +88,69 @@ export default function FleetCost() {
 
           <div style={{ marginTop: 12, padding: '10px 12px', border: '1px solid var(--color-accent)', background: 'var(--color-accent-100)' }}>
             <div style={{ fontSize: 11.5, color: 'var(--color-accent-800)' }}>
-              <span className="mono">AFR5403</span> {COST_CALLOUT}
+              <span className="mono">AHB2107</span> {COST_CALLOUT}
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── 2.4 Trip P&L ─────────────────────────────────────────────────────────
+   ⚠⚠ Every input names where it comes from, on the row. The results are
+   computed from those inputs here; none is typed in. Inputs: lib/data.ts TRIP_PL. */
+const usd = (n: number) => `$${n.toFixed(2)}`;
+
+function TripPL() {
+  const p = TRIP_PL;
+  /* ⚠ The distance is TM-2's own road estimate for trip 05 in the planner's
+     order, rounded the way TM-2 prints it — read, never typed. */
+  const route = cachedRoute(SEED_STOPS.map((x) => x.suburb));
+  const km = route ? Math.round(route.km) : 0;
+  const running = km * p.costPerKm;
+  const crew = p.crew.people * p.crew.perDay;
+  const other = p.otherStops * p.revenuePerDelivery;
+  const revenue = p.charge414414 + other;
+  const contribution = revenue - running - crew;
+
+  const rows: { label: string; value: string; src: string; indent?: boolean; strong?: boolean }[] = [
+    { label: 'Delivery charges', value: usd(revenue), src: '', strong: true },
+    { label: 'invoice 414414', value: usd(p.charge414414), src: 'TM-4 record', indent: true },
+    { label: `${p.otherStops} other stops × ${usd(p.revenuePerDelivery)}`, value: usd(other), src: 'TM-5 row · illustrative', indent: true },
+    { label: 'Vehicle running', value: `− ${usd(running)}`, src: '', strong: true },
+    { label: `${km} km ×$${p.costPerKm.toFixed(3)}/km`, value: '', src: 'TM-2 road estimate × TM-5 row', indent: true },
+    { label: 'Driver and crew', value: `− ${usd(crew)}`, src: '', strong: true },
+    { label: `${p.crew.people} people × ${usd(p.crew.perDay)} a day`, value: '', src: 'illustrative · no wage data here', indent: true },
+  ];
+
+  return (
+    <div data-testid="trip-pl" style={{ marginTop: 18 }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 8 }}>
+        <div style={{ fontSize: 10, letterSpacing: '.1em', textTransform: 'uppercase', color: N6 }}>Trip P&amp;L</div>
+        <div className="mono" style={{ fontSize: 11.5 }}>{p.trip} · {p.vehicle}</div>
+      </div>
+      {rows.map((r) => (
+        <div
+          key={r.label}
+          style={{ display: 'flex', alignItems: 'baseline', gap: 12, padding: '5px 0', borderBottom: '1px solid var(--color-neutral-300)' }}
+        >
+          <div style={{ fontSize: r.indent ? 11.5 : 12.5, paddingLeft: r.indent ? 16 : 0, color: r.indent ? N7 : TX, fontWeight: r.strong ? 600 : 400 }}>
+            {r.label}
+          </div>
+          <div style={{ fontSize: 10.5, color: N6, marginLeft: 'auto' }}>{r.src}</div>
+          <div className="mono" style={{ fontSize: 13, textAlign: 'right', minWidth: 90 }}>{r.value}</div>
+        </div>
+      ))}
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, padding: '8px 0', borderBottom: '2px solid var(--color-divider)' }}>
+        <div style={{ fontSize: 13, fontWeight: 700 }}>Contribution from transport</div>
+        <div className="mono" style={{ marginLeft: 'auto', fontSize: 15, fontWeight: 700, color: contribution < 0 ? AC : TX }}>
+          {contribution < 0 ? `− ${usd(-contribution)}` : usd(contribution)}
+        </div>
+      </div>
+      <div style={{ fontSize: 11, color: N7, marginTop: 8, lineHeight: 1.45 }}>
+        Illustrative. Excludes the margin on the goods, which belongs to the selling branch, and the two
+        depot legs, which are not routed. Trip P&amp;L for every trip is a report, not this panel — see Reports.
       </div>
     </div>
   );

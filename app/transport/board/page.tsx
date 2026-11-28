@@ -7,7 +7,7 @@
 import { useRouter } from 'next/navigation';
 import {
   AC, BOARD_FOOTER_FIGURES, BOARD_FOOTER_PROSE, BUILDING_STATIC, N6, RUNNING,
-  SEED_VEHICLE, UNPLANNED, UNPLANNED_MORE, UNPLANNED_TOTAL, zoneOf,
+  SEED_TRIP_ID, SEED_TRIP_TRANSFER, SEED_VEHICLE, UNPLANNED, UNPLANNED_MORE, UNPLANNED_TOTAL, zoneOf,
 } from '@/lib/data';
 import { useConsole } from '@/components/ConsoleState';
 import { TripCardView } from '@/components/TripCard';
@@ -52,6 +52,9 @@ export default function Board() {
     capPct: pct,
     statusColor: AC,
     edge: AC,
+    /* ⚠ Only the seeded trip carries IDO-…-0007. A new trip built in the room
+       has no transfer on it, and its card must not borrow one. */
+    transfer: tripId === SEED_TRIP_ID ? SEED_TRIP_TRANSFER : undefined,
   };
 
   const building = [BUILDING_STATIC[0], current, ...BUILDING_STATIC.slice(1)];
